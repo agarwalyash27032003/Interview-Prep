@@ -9,10 +9,10 @@ const tokenBlacklistModel = require("../models/backlist.model")
  * @access PUBLIC
  */
 async function registerUserContoller(req, res) {
-    
-    const {username, email, password } = req.body;
 
-    if(!username || !email || !password){
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
         return res.status(400).json({
             message: "Username, Email and Password is required"
         })
@@ -20,13 +20,13 @@ async function registerUserContoller(req, res) {
 
     // If we get a User with either same username or same email then return the user
     const isUserAlreadyExists = await userModel.findOne({
-        $or: [ {username}, {email} ]
+        $or: [{ username }, { email }]
     })
 
-    if(isUserAlreadyExists){
+    if (isUserAlreadyExists) {
         return res.status(400).json({
             message: "User already exists"
-        }) 
+        })
     }
 
     const hash = await bcrypt.hash(password, 10)
@@ -37,16 +37,16 @@ async function registerUserContoller(req, res) {
     })
 
     const token = jwt.sign(
-        {id: user._id, username: user.username},
+        { id: user._id, username: user.username },
         process.env.JWT_SECRET,
-        {expiresIn: "1d"}
+        { expiresIn: "1d" }
     )
 
     res.cookie("token", token)
-    
+
     res.status(201).json({
         message: "User Registered Successfully",
-        user:{
+        user: {
             id: user._id,
             username: user.username,
             email: user.email
@@ -60,37 +60,42 @@ async function registerUserContoller(req, res) {
  * @description Login a User
  * @access PUBLIC
  */
-async function loginUserContoller(req, res){
+async function loginUserContoller(req, res) {
 
-    const {email, password} = req.body
-    
-    const user = await userModel.findOne({email})
+    const { email, password } = req.body
 
-    if(!user){
+    const user = await userModel.findOne({ email })
+
+    if (!user) {
         return res.status(400).json({
             message: "Invalid email or password"
         })
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
-    
-    if(!isPasswordValid){
+
+    if (!isPasswordValid) {
         return res.status(400).json({
             message: "Password is invalid"
         })
     }
 
     const token = jwt.sign(
-        {id: user._id, username: user.username},
+        { id: user._id, username: user.username },
         process.env.JWT_SECRET,
-        {expiresIn: "1d"}
+        { expiresIn: "1d" }
     )
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000
+    })
 
     res.status(200).json({
         message: "User LoggedIn Successfully",
-        user:{
+        user: {
             id: user._id,
             username: user.username,
             email: user.email
@@ -104,12 +109,12 @@ async function loginUserContoller(req, res){
  * @description Logout a User
  * @access PUBLIC
  */
-async function logoutUserContoller(req, res){
+async function logoutUserContoller(req, res) {
 
     const token = req.cookies.token
-    
-    if(token){
-        await tokenBlacklistModel.create({token})
+
+    if (token) {
+        await tokenBlacklistModel.create({ token })
     }
 
     res.clearCookie("token")
@@ -125,13 +130,13 @@ async function logoutUserContoller(req, res){
  * @description Get details of a user
  * @access PROTECTED
  */
-async function getMeContoller(req, res){
+async function getMeContoller(req, res) {
 
     const user = await userModel.findById(req.user.id)
 
     return res.status(200).json({
-        message:"User details fetched successfully",
-        user:{
+        message: "User details fetched successfully",
+        user: {
             id: user._id,
             username: user.username,
             email: user.email
@@ -143,7 +148,7 @@ async function getMeContoller(req, res){
 
 module.exports = {
     registerUserContoller,
-    loginUserContoller, 
+    loginUserContoller,
     logoutUserContoller,
     getMeContoller
 }
