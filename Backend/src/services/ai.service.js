@@ -40,10 +40,97 @@ const interviewReportSchema = z.object({
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
 
-    const prompt = `Generate an interview report for a candidate with the following details:
-                    Resume: ${resume}
-                    Self Description: ${selfDescription}
-                    Job Description: ${jobDescription}`
+    const prompt = `
+        You are an experienced technical interviewer and hiring manager.
+
+        Analyze the candidate's Resume, Self Description, and Job Description deeply and generate a highly realistic interview report.
+
+        Your goal is to create interview questions that:
+        - evaluate real technical understanding
+        - test problem-solving ability
+        - verify authenticity of projects and work experience
+        - assess depth of knowledge in mentioned skills
+        - identify resume exaggeration or weak areas
+        - simulate actual company interview rounds
+
+        IMPORTANT INSTRUCTIONS:
+
+        1. Technical Questions
+        - Generate highly relevant technical questions based on:
+        - projects
+        - internships
+        - work experience
+        - technologies used
+        - frameworks
+        - tools
+        - architecture decisions
+        - deployment
+        - APIs
+        - databases
+        - authentication
+        - optimization
+        - debugging
+        - scalability
+        - security
+        - system design
+        - coding concepts
+        - Ask follow-up style questions like real interviews.
+        - Questions should progressively increase in difficulty.
+        - Include scenario-based and practical questions.
+        - Include "why did you choose this approach?" type questions.
+        - Include edge cases and tradeoff discussions.
+        - Include questions that test whether the candidate actually built the project.
+        - DO NOT generate generic textbook questions unless directly relevant.
+        - DO NOT limit the number of questions.
+        - Generate as many questions as needed based on the resume and job description quality.
+
+        2. Behavioral Questions
+        - Generate behavioral and HR questions tailored to:
+        - candidate background
+        - projects
+        - leadership
+        - collaboration
+        - failures
+        - challenges
+        - communication
+        - decision making
+        - conflict handling
+        - learning ability
+        - time management
+        - Questions should feel realistic and company-level.
+
+        3. Answers
+        - Provide strong interview-ready guidance.
+        - Explain:
+        - what interviewer wants to evaluate
+        - what points candidate should cover
+        - common mistakes to avoid
+        - ideal structure of response
+        - Keep answers practical and concise.
+
+        4. Skill Gaps
+        - Identify genuine missing skills or weak areas.
+        - Compare resume against job description carefully.
+        - Mention severity honestly.
+
+        5. Preparation Plan
+        - Create a practical preparation roadmap.
+        - Prioritize weak areas and interview-critical topics.
+        - Include mock interviews, revision, and project preparation.
+
+        6. Match Score
+        - Give a realistic score between 0 and 100.
+        - Do not inflate scores unnecessarily.
+
+        Resume:
+        ${resume}
+
+        Self Description:
+        ${selfDescription}
+
+        Job Description:
+        ${jobDescription}
+        `
 
     const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
