@@ -1,0 +1,17 @@
+@use "./styles/button.scss";
+
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+html, body, #root{
+    width: 100%;
+    background-color: #161616;
+    color: white;
+}
+
+.highlight{
+    color: #ff2a5c;
+}
