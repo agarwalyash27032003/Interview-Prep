@@ -3,12 +3,20 @@ const cookieParser = require('cookie-parser')
 const cors = require("cors")
 
 const app = express()
+const allowedOrigins = [ "http://localhost:5173", "https://interview-prep-2ude.onrender.com"]
 
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: "https://interview-prep-2ude.onrender.com",
-    credentials: true
+
+   origin: [
+
+      "http://localhost:5173",
+
+      "https://interview-prep-2ude.onrender.com"
+   ],
+
+   credentials: true
 }))
 
 /* All the Routes are required here */

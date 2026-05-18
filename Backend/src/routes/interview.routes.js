@@ -1,6 +1,7 @@
 const express = require("express")
 const authMiddleware = require("../middlewares/auth.middleware")
 const interviewController = require("../controllers/interview.controller")
+const mockInterviewController = require("../controllers/mockInterview.controller")
 const upload = require("../middlewares/file.middleware")
 
 const interviewRouter = express.Router()
@@ -43,12 +44,35 @@ interviewRouter.get("/", authMiddleware.authUser, interviewController.getAllInte
  */
 interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUser, interviewController.generateResumePdfController)
 
+// MOCK INTERVIEWS
+
 /**
  * @route GET /api/interview/:interviewId/mock
- * @description Start a Mock Interview for that report.
+ * @description Get all mock interviews for that interview id.
  * @access private
  */
-interviewRouter.delete("/report/:interviewId", authMiddleware.authUser, interviewController.deleteInterviewReportByIdController)
+// interviewRouter.get("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.getAllMockInterviewByInterviewIdController)
+
+/**
+ * @route POST /api/interview/:interviewId/mock
+ * @description Start a mock for that interview id.
+ * @access private
+ */
+interviewRouter.post("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.getAllMockInterviewByInterviewIdController)
+
+/**
+ * @route GET /api/interview/:interviewId/mock/:mockId
+ * @description Get a mock report for that id.
+ * @access private
+ */
+interviewRouter.get("/:interviewId/mock/:mockId", authMiddleware.authUser, mockInterviewController.getMockInterviewByIdController)
+
+/**
+ * @route DELETE /api/interview/:interviewId/mock
+ * @description Delete the mock with the id.
+ * @access private
+ */
+interviewRouter.delete("/:interviewId/mock/:mockId", authMiddleware.authUser, mockInterviewController.deleteMockInterviewByIdController)
 
 
 module.exports = interviewRouter

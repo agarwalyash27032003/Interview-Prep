@@ -8,7 +8,7 @@ const mockInterviewReportSchema = mongoose.Schema({
     },
     interviewReport: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "InteviewReport"
+        ref: "InterviewReport"
     },
     answers: [{
         section: {
