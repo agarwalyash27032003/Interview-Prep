@@ -45,16 +45,23 @@ async function registerUserContoller(req, res) {
     const isProduction =
     process.env.NODE_ENV === "production"
 
-res.cookie("token", token, {
+const cookieOptions = {
 
     httpOnly: true,
 
-    secure: false,
+    secure:
+        process.env.NODE_ENV === "production",
 
-    sameSite: "lax",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
 
-    maxAge: 24 * 60 * 60 * 1000
-})
+    maxAge:
+        24 * 60 * 60 * 1000
+}
+
+res.cookie("token", token, cookieOptions)
 
     res.status(201).json({
         message: "User Registered Successfully",
@@ -101,16 +108,23 @@ async function loginUserContoller(req, res) {
     const isProduction =
         process.env.NODE_ENV === "production"
 
-    res.cookie("token", token, {
+    const cookieOptions = {
 
     httpOnly: true,
 
-    secure: false,
+    secure:
+        process.env.NODE_ENV === "production",
 
-    sameSite: "lax",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
 
-    maxAge: 24 * 60 * 60 * 1000
-})
+    maxAge:
+        24 * 60 * 60 * 1000
+}
+
+res.cookie("token", token, cookieOptions)
 
 
 
@@ -141,16 +155,23 @@ async function logoutUserContoller(req, res) {
     const isProduction =
         process.env.NODE_ENV === "production"
 
-    res.cookie("token", token, {
+    const cookieOptions = {
 
     httpOnly: true,
 
-    secure: false,
+    secure:
+        process.env.NODE_ENV === "production",
 
-    sameSite: "lax",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
 
-    maxAge: 24 * 60 * 60 * 1000
-})
+    maxAge:
+        24 * 60 * 60 * 1000
+}
+
+res.cookie("token", token, cookieOptions)
 
     res.status(200).json({
         message: "User Logged Out Successfully"
