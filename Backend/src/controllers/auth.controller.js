@@ -42,7 +42,19 @@ async function registerUserContoller(req, res) {
         { expiresIn: "1d" }
     )
 
-    res.cookie("token", token)
+    const isProduction =
+    process.env.NODE_ENV === "production"
+
+res.cookie("token", token, {
+
+    httpOnly: true,
+
+    secure: false,
+
+    sameSite: "lax",
+
+    maxAge: 24 * 60 * 60 * 1000
+})
 
     res.status(201).json({
         message: "User Registered Successfully",
@@ -86,12 +98,21 @@ async function loginUserContoller(req, res) {
         { expiresIn: "1d" }
     )
 
+    const isProduction =
+        process.env.NODE_ENV === "production"
+
     res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 24 * 60 * 60 * 1000
-    })
+
+    httpOnly: true,
+
+    secure: false,
+
+    sameSite: "lax",
+
+    maxAge: 24 * 60 * 60 * 1000
+})
+
+
 
     res.status(200).json({
         message: "User LoggedIn Successfully",
@@ -117,7 +138,19 @@ async function logoutUserContoller(req, res) {
         await tokenBlacklistModel.create({ token })
     }
 
-    res.clearCookie("token")
+    const isProduction =
+        process.env.NODE_ENV === "production"
+
+    res.cookie("token", token, {
+
+    httpOnly: true,
+
+    secure: false,
+
+    sameSite: "lax",
+
+    maxAge: 24 * 60 * 60 * 1000
+})
 
     res.status(200).json({
         message: "User Logged Out Successfully"
@@ -133,6 +166,12 @@ async function logoutUserContoller(req, res) {
 async function getMeContoller(req, res) {
 
     const user = await userModel.findById(req.user.id)
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not logged in / signed up",
+        })
+    }
 
     return res.status(200).json({
         message: "User details fetched successfully",

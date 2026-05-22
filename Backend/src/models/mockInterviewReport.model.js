@@ -11,9 +11,12 @@ const mockInterviewReportSchema = mongoose.Schema({
         ref: "InterviewReport"
     },
     answers: [{
+        questionIndex: {
+            type: Number
+        },
         section: {
             type: String,
-            enum:["technical", "behavioral"],
+            enum: ["technical", "behavioral"],
             required: [true, "Section is required"]
         },
 
@@ -35,28 +38,54 @@ const mockInterviewReportSchema = mongoose.Schema({
 
         feedback: {
             type: String
+        },
+        duration: {
+            type: Number
         }
     }],
 
+    currentSection:{
+        type:String,
+        default:null
+    },
+    
+    currentQuestionIndex:{
+        type:Number,
+        default:0
+    },
+
+    completedSections:{
+        type:[String],
+        default:[]
+    },
+
     overallScore: {
         type: Number,
-        required: [true, "Overall Score is required"]
+        default: 0
     },
 
     overallFeedback: {
         type: String,
-            required: [true, "Overall Feedback is required"]
+        default: ""
     },
-
+    status: {
+        type: String,
+        enum: [
+            "in-progress",
+            "completed"
+        ],
+        default: "in-progress",
+        required: [true, "Status is required"]
+    },
     completedAt: {
         type: Date,
-        default: Date.now
+        default: null
     }
 
 }, {
     timestamps: true
 })
 
-const mockInterviewReportModel = mongoose.model("MockInteviewReport", mockInterviewReportSchema)
+const mockInterviewReportModel = mongoose.model("MockInterviewReport", mockInterviewReportSchema)
 
 module.exports = mockInterviewReportModel;

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "https://interview-prep-3knt.onrender.com/",
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials:true
 })
 
@@ -51,15 +51,9 @@ export async function logout(){
 }
 
 export async function getMe() {
-    
-    try{
 
-        const response = await api.get("/api/auth/get-me")
+    const response =
+        await api.get("/api/auth/get-me")
 
-        return response.data;
-
-    }catch(err){
-        console.log(err)
-    }
-
+    return response.data
 }

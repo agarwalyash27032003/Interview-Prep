@@ -12,6 +12,8 @@ async function generateInterViewReportController(req, res) {
         // console.log(req.file)
         // console.log(req.body)
 
+        
+
         const { selfDescription, jobDescription } = req.body
 
         let resumeContent = ""
@@ -124,7 +126,14 @@ async function deleteInterviewReportByIdController(req, res) {
  * @description Controller to get all interview reports of logged in user.
  */
 async function getAllInterviewReportsController(req, res) {
+
     const interviewReports = await interviewReportModel.find({ user: req.user.id }).sort({ createdAt: -1 }).select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
+
+    if(!interviewReports){
+        res.status(404).json({
+            message: "No Interview reports found"
+        })
+    }
 
     res.status(200).json({
         message: "Interview reports fetched successfully.",

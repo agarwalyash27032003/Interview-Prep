@@ -51,21 +51,35 @@ interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUser, 
  * @description Get all mock interviews for that interview id.
  * @access private
  */
-// interviewRouter.get("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.getAllMockInterviewByInterviewIdController)
+interviewRouter.get("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.getAllMockInterviewByInterviewIdController)
 
 /**
  * @route POST /api/interview/:interviewId/mock
- * @description Start a mock for that interview id.
+ * @description Start a mock.
  * @access private
  */
-interviewRouter.post("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.getAllMockInterviewByInterviewIdController)
+interviewRouter.post("/:interviewId/mock", authMiddleware.authUser, mockInterviewController.createMockInterviewController)
 
 /**
- * @route GET /api/interview/:interviewId/mock/:mockId
+ * @route POST /api/interview/:interviewId/mock/:mockId
+ * @description Complete a mock for that interview id.
+ * @access private
+ */
+interviewRouter.post("/:interviewId/mock/:mockId", authMiddleware.authUser, mockInterviewController.generateMockInterviewReportController)
+
+/**
+ * @route GET /interview/:interviewId/mock/:mockId/report
  * @description Get a mock report for that id.
  * @access private
  */
-interviewRouter.get("/:interviewId/mock/:mockId", authMiddleware.authUser, mockInterviewController.getMockInterviewByIdController)
+interviewRouter.get("/:interviewId/mock/:mockId/report", authMiddleware.authUser, mockInterviewController.getMockInterviewByIdController)
+
+/**
+ * @route PATCH /api/interview/:interviewId/mock/:mockId/progress
+ * @description Updating a mock everytime question updates
+ * @access private
+ */
+interviewRouter.patch("/:interviewId/mock/:mockId/progress", authMiddleware.authUser, mockInterviewController.updateMockInterviewController)
 
 /**
  * @route DELETE /api/interview/:interviewId/mock

@@ -1,0 +1,20 @@
+.choose-section{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.question-section{
+    width: 70%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 1rem;
+    padding-block: 2rem;
+}
+
+.question-buttons{
+    display: flex;
+    justify-content: space-between;
+}

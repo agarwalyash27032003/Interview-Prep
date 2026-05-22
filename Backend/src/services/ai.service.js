@@ -2,14 +2,19 @@ const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema");
 const puppeteer = require("puppeteer")
+const OpenAI = require("openai")
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 })
 
+// const ai = new OpenAI({
+//     apiKey: process.env.OPENAI_API_KEY
+// })
+
 async function invokeGeminiAi() {
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-flash-lite",
         contents: "Hello Gemini! Explain What is Interview?"
     })
 }
@@ -133,7 +138,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
         `
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash-lite",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -324,7 +329,7 @@ ${jobDescription}
 `
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash-lite",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -341,7 +346,11 @@ ${jobDescription}
 
 }
 
-async function generateMockInterviewReport({ answers }) {
+async function generateMockInterviewReport({
+
+    answers
+
+}) {
 
     const prompt = `
 
@@ -355,123 +364,135 @@ For every answer:
 - Evaluate communication clarity
 - Evaluate confidence and completeness
 - Give score out of 10
+- Give concise actionable feedback
 - Mention strengths
 - Mention areas of improvement
 
 Also provide:
 
-- overall interview score
-- overall strengths
-- overall weaknesses
-- final recommendation
+- overall interview score out of 100
+- overall interview feedback
 
 Candidate Answers:
 ${JSON.stringify(answers, null, 2)}
 
 `
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
+    const response =
+        await ai.models.generateContent({
 
-            responseSchema: {
+            model:
+                "gemini-2.5-flash",
 
-                type: "object",
+            contents: prompt,
 
-                properties: {
+            config: {
 
-                    overallScore: {
-                        type: "number"
-                    },
+                responseMimeType:
+                    "application/json",
 
-                    technicalFeedback: {
-                        type: "array",
-                        items: {
+                responseSchema: {
 
-                            type: "object",
+                    type: "object",
 
-                            properties: {
+                    properties: {
 
-                                question: {
-                                    type: "string"
+                        answers: {
+
+                            type: "array",
+
+                            items: {
+
+                                type: "object",
+
+                                properties: {
+
+                                    questionIndex: {
+                                        type: "number"
+                                    },
+
+                                    score: {
+                                        type: "number"
+                                    },
+
+                                    feedback: {
+                                        type: "string"
+                                    }
+
                                 },
 
-                                userAnswer: {
-                                    type: "string"
-                                },
+                                required: [
 
-                                score: {
-                                    type: "number"
-                                },
+                                    "questionIndex",
 
-                                strengths: {
-                                    type: "string"
-                                },
+                                    "score",
 
-                                improvements: {
-                                    type: "string"
-                                }
+                                    "feedback"
+                                ]
                             }
-                        }
-                    },
+                        },
 
-                    behavioralFeedback: {
-                        type: "array",
-                        items: {
+                        overallScore: {
+                            type: "number"
+                        },
 
-                            type: "object",
-
-                            properties: {
-
-                                question: {
-                                    type: "string"
-                                },
-
-                                userAnswer: {
-                                    type: "string"
-                                },
-
-                                score: {
-                                    type: "number"
-                                },
-
-                                strengths: {
-                                    type: "string"
-                                },
-
-                                improvements: {
-                                    type: "string"
-                                }
-                            }
-                        }
-                    },
-
-                    overallStrengths: {
-                        type: "array",
-                        items: {
+                        overallFeedback: {
                             type: "string"
                         }
                     },
 
-                    overallWeaknesses: {
-                        type: "array",
-                        items: {
-                            type: "string"
-                        }
-                    },
+                    required: [
 
-                    finalRecommendation: {
-                        type: "string"
-                    }
+                        "answers",
+
+                        "overallScore",
+
+                        "overallFeedback"
+                    ]
                 }
             }
-        }
-    })
+        })
 
-    return (JSON.parse(response.text))
+    const aiEvaluation =
+        JSON.parse(response.text)
 
+    const evaluatedAnswers =
+        answers.map(answer => {
+
+            const evaluation =
+                aiEvaluation.answers.find(
+
+                    item =>
+
+                        item.questionIndex
+                        === answer.questionIndex
+                )
+
+            return {
+
+                ...answer,
+
+                score:
+                    evaluation?.score ?? 0,
+
+                feedback:
+                    evaluation?.feedback
+                    ?? ""
+            }
+        })
+
+    return {
+
+        answers:
+            evaluatedAnswers,
+
+        overallScore:
+            aiEvaluation.overallScore,
+
+        overallFeedback:
+            aiEvaluation.overallFeedback
+    }
 }
+
 
 module.exports = { generateInterviewReport, generateResumePdf, generateMockInterviewReport }

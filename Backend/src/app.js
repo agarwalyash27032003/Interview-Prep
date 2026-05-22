@@ -1,3 +1,5 @@
+
+
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const cors = require("cors")
@@ -5,8 +7,7 @@ const cors = require("cors")
 const app = express()
 const allowedOrigins = [ "http://localhost:5173", "https://interview-prep-2ude.onrender.com"]
 
-app.use(express.json());
-app.use(cookieParser())
+
 app.use(cors({
 
    origin: [
@@ -18,6 +19,8 @@ app.use(cors({
 
    credentials: true
 }))
+app.use(express.json());
+app.use(cookieParser())
 
 /* All the Routes are required here */
 const authRouter = require('./routes/auth.routes')
