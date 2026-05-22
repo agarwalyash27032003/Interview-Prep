@@ -1,16 +1,188 @@
-# React + Vite
+# PrepWise AI 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PrepWise AI is an AI-powered Interview Preparation Platform that helps students and job seekers prepare smarter for placements and interviews.
 
-Currently, two official plugins are available:
+Users can upload their:
+- 📄 Resume
+- 💼 Job Description
+- 🧑 Self Description / Introduction
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Based on these inputs, PrepWise AI generates a complete personalized interview preparation report including:
+- Technical Questions
+- Behavioral Questions
+- Skill Gap Analysis
+- Learning Roadmap
+- Match Score
+- Expected Answers
+- Interviewer Intentions Behind Questions
+- Improved Resume Download
 
-## React Compiler
+The platform also includes an AI-powered Mock Interview System where users answer questions orally and receive detailed AI feedback and performance analysis.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+# 🌟 Core Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📄 AI Resume & Job Analysis
+
+Users upload:
+- Resume
+- Job Description
+- Self Description
+
+The AI analyzes all inputs and generates a complete report.
+
+### ✅ Generated Report Includes
+
+### 🎯 Match Score
+- Resume vs Job Description compatibility score
+- ATS-style analysis
+- Strength & weakness breakdown
+
+### 💻 Technical Questions
+- Personalized technical interview questions
+- Questions generated based on:
+  - Skills in resume
+  - Job role
+  - Experience level
+
+Each question contains:
+- Interviewer Intention
+- Expected Answer
+- Difficulty Level
+
+### 🧠 Behavioral Questions
+- HR and behavioral interview questions
+- Situation-based questions
+- Personality-focused analysis
+
+Each question contains:
+- Why interviewer asks this
+- What interviewer expects
+- Ideal answering strategy
+
+### 📉 Skill Gap Analysis
+AI identifies:
+- Missing skills
+- Weak concepts
+- Technologies to improve
+- Keywords absent in resume
+
+### 🛣️ Personalized Roadmap
+A step-by-step roadmap to improve:
+- Technical skills
+- Communication
+- Resume quality
+- Interview readiness
+
+### 📄 AI Resume Improvement
+Users can:
+- Generate optimized resume
+- Fix missing keywords
+- Improve ATS compatibility
+- Download improved resume
+
+---
+
+# 🎤 AI Mock Interview System
+
+PrepWise AI provides a real-time mock interview experience.
+
+Users answer questions orally using:
+- 🎙️ Microphone
+- 📹 Webcam (optional)
+
+AI evaluates:
+- Answer quality
+- Communication clarity
+- Confidence
+- Speaking fluency
+- Keywords used
+- Overall interview performance
+
+---
+
+# 📊 Mock Interview Report
+
+After the interview, AI generates a detailed report.
+
+## ✅ Report Includes
+
+### 📝 Answer Analysis
+- How user answered
+- Strengths in answer
+- Weak areas
+
+### 📌 Points To Cover
+Important concepts or points missing in answer.
+
+### ⚠️ Common Mistakes
+AI highlights:
+- Filler words
+- Weak explanations
+- Lack of structure
+- Missing technical depth
+
+### 💬 Personalized Feedback
+Suggestions to improve:
+- Communication
+- Technical explanation
+- Confidence
+- Structure of answer
+
+### 📈 Overall Interview Score
+Performance scoring based on:
+- Accuracy
+- Confidence
+- Clarity
+- Relevance
+- Communication
+
+---
+
+# 🏗️ Tech Stack
+
+## Frontend
+- React.js
+- Vite
+- SCSS
+- Axios
+- React Router DOM
+
+## Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+
+## AI & Analysis
+- OpenAI API / Gemini API
+- Speech-to-Text Analysis
+
+---
+
+# 📁 Project Structure
+
+```bash
+PrepWise-AI/
+│
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── redux/
+│   └── package.json
+│
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── services/
+│   ├── utils/
+│   └── package.json
+│
+├── docker-compose.yml
+├── README.md
+└── .env
