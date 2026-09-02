@@ -11,6 +11,7 @@ const allowedOrigins = [ "http://localhost:5173", "https://interview-prep-2ude.o
 app.use(cors({
 
    origin: [
+      "http://localhost:5173",
       "https://interview-prep-2ude.onrender.com"
    ],
 

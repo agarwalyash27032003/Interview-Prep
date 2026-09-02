@@ -14,6 +14,18 @@ const techicalQuestionSchema = new mongoose.Schema({
         type:String,
         required: [true, "Answer is Required"]
     },
+    sourceGrounding:{
+        type:String
+    },
+    groundedSkills:[{
+        type:String
+    }],
+    isVerified:{
+        type:Boolean
+    },
+    verificationStatus:{
+        type:String
+    }
 
 },{
     _id: false
@@ -33,6 +45,18 @@ const behavioralQuestionSchema = new mongoose.Schema({
         type:String,
         required: [true, "Answer is Required"]
     },
+    sourceGrounding:{
+        type:String
+    },
+    groundedSkills:[{
+        type:String
+    }],
+    isVerified:{
+        type:Boolean
+    },
+    verificationStatus:{
+        type:String
+    }
 
 },{
     _id: false
@@ -47,6 +71,15 @@ const skillGapSchema = new mongoose.Schema({
         type: String,
         enum: ["low", "medium", "high"],
         required: [true, "Severity is required"]
+    },
+    justification:{
+        type: String
+    },
+    isVerifiedFair:{
+        type: Boolean
+    },
+    verificationStatus:{
+        type: String
     }
 },{
     _id: false
@@ -77,7 +110,7 @@ const interviewReportSchema = new mongoose.Schema({
     resume:{
         type:String,
     },
-    selfDeclaration:{
+    selfDescription:{
         type:String,
     },
     matchScore:{
@@ -89,6 +122,9 @@ const interviewReportSchema = new mongoose.Schema({
     behavioralQuestions: [behavioralQuestionSchema],
     skillGaps: [skillGapSchema],
     preparationPlan: [preparationPlanSchema],
+    validation: {
+        type: mongoose.Schema.Types.Mixed
+    },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"users"

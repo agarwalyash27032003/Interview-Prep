@@ -72,8 +72,22 @@ async function generateInterViewReportController(req, res) {
 
         console.log(err)
 
+        const isOverloaded =
+            err?.status === 503 ||
+            err?.status === 429 ||
+            /UNAVAILABLE|high demand|RESOURCE_EXHAUSTED|try again/i.test(
+                String(err?.message || "")
+            )
+
+        if (isOverloaded) {
+            return res.status(503).json({
+                message:
+                    "AI service is temporarily busy. Please try again in a moment."
+            })
+        }
+
         res.status(500).json({
-            message: err.message
+            message: "Failed to generate interview report. Please try again."
         })
     }
 }

@@ -280,6 +280,17 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
         background-color: rgba($accent, 0.05);
     }
 
+    &--uploaded {
+        border-color: $accent;
+        border-style: solid;
+        background-color: rgba($accent, 0.08);
+
+        .dropzone__title {
+            color: $accent;
+            word-break: break-all;
+        }
+    }
+
     &__icon {
         color: $accent;
         margin-bottom: 0.25rem;

@@ -9,16 +9,34 @@ const Home = () => {
     const { loading, generateReport, reports, deleteReportById } = useInterview()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
+    const [error, setError] = useState("")
+    const [resumeFile, setResumeFile] = useState(null)
     const resumeInputRef = useRef()
 
     const {handleLogout} = useAuth()
 
     const navigate = useNavigate()
 
+    const handleResumeChange = (e) => {
+        const file = e.target.files?.[0] || null
+        setResumeFile(file)
+    }
+
     const handleGenerateReport = async () => {
-        const resumeFile = resumeInputRef.current.files[0]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-        navigate(`/interview/${data._id}`)
+        setError("")
+        try {
+            const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+            if (!data?._id) {
+                setError("Failed to generate report. The AI service may be busy — please try again.")
+                return
+            }
+            navigate(`/interview/${data._id}`)
+        } catch (err) {
+            const message =
+                err?.response?.data?.message ||
+                "Failed to generate report. Please try again."
+            setError(message)
+        }
     }
 
     const handleDeleteReport = async (id) => {
@@ -117,13 +135,34 @@ const Home = () => {
                                 Upload Resume
                                 <span className='badge badge--best'>Best Results</span>
                             </label>
-                            <label className='dropzone' htmlFor='resume'>
+                            <label className={`dropzone ${resumeFile ? 'dropzone--uploaded' : ''}`} htmlFor='resume'>
                                 <span className='dropzone__icon'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
+                                    {resumeFile ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="9" y1="15" x2="15" y2="15" /><line x1="9" y1="12" x2="15" y2="12" /></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
+                                    )}
                                 </span>
-                                <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
-                                <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                {resumeFile ? (
+                                    <>
+                                        <p className='dropzone__title'>{resumeFile.name}</p>
+                                        <p className='dropzone__subtitle'>Resume uploaded successfully · Click to change</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
+                                        <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
+                                    </>
+                                )}
+                                <input
+                                    ref={resumeInputRef}
+                                    onChange={handleResumeChange}
+                                    hidden
+                                    type='file'
+                                    id='resume'
+                                    name='resume'
+                                    accept='.pdf,.docx'
+                                />
                             </label>
                         </div>
 
@@ -162,6 +201,11 @@ const Home = () => {
                         Generate My Interview Strategy
                     </button>
                 </div>
+                {error && (
+                    <p className='form-error' role='alert' style={{ color: '#ff6b6b', padding: '0 1.5rem 1rem', margin: 0 }}>
+                        {error}
+                    </p>
+                )}
             </div>
 
             {/* Recent Reports List */}

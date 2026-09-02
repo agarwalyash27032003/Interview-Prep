@@ -385,7 +385,9 @@ const Interview = () => {
                                                     className='button primary-button'
                                                     onClick={() =>
                                                         navigate(
-                                                            `/interview/${interviewId}/mock/${mock._id}/report`
+                                                            isCompleted
+                                                                ? `/interview/${interviewId}/mock/${mock._id}/report`
+                                                                : `/interview/${interviewId}/mock/${mock._id}`
                                                         )
                                                     }
                                                 >
